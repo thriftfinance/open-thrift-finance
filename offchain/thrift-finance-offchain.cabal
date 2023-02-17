@@ -1,0 +1,182 @@
+cabal-version:      3.0
+name:               thrift-finance-offchain
+version:            0.1
+synopsis:           TODO
+description:        TODO
+homepage:           https://github.com/mlabs-haskell/thrift-finance
+bug-reports:        https://github.com/mlabs-haskell/thrift-finance
+license:
+license-file:
+author:             MLabs
+maintainer:         TODO
+copyright:          TODO
+category:           TODO
+build-type:         Simple
+tested-with:        GHC ==8.10.7
+extra-source-files:
+  compiled/*.plutus
+  README.md
+
+source-repository head
+  type:     git
+  location: https://github.com/mlabs-haskell/thrift-finance
+
+-- Common sections
+common common-imports
+  build-depends:
+    , aeson
+    , bytestring
+    , containers
+    , data-default
+    , filepath
+    , lens
+    , mtl
+    , plutip
+    , plutus-chain-index-core
+    , plutus-contract
+    , plutus-ledger
+    , plutus-ledger-api
+    , plutus-ledger-constraints
+    , plutus-script-utils
+    , plutus-tx
+    , ply-core
+    , positive
+    , row-types
+    , thrift-finance-common
+
+--    , plutus-partial-tx
+common common-lang
+  ghc-options:
+    -Wall -Wcompat -Wincomplete-uni-patterns -Wno-unused-do-bind
+    -Wno-partial-type-signatures -Wmissing-export-lists
+    -Wincomplete-record-updates -Wmissing-deriving-strategies
+    -Wno-name-shadowing -Wunused-foralls
+    -Wno-unticked-promoted-constructors -fprint-explicit-foralls
+    -fprint-explicit-kinds -fwarn-missing-import-lists -Werror
+
+  build-depends:      base
+  default-extensions:
+    NoStarIsType
+    BangPatterns
+    BinaryLiterals
+    ConstrainedClassMethods
+    ConstraintKinds
+    DataKinds
+    DeriveAnyClass
+    DeriveDataTypeable
+    DeriveFoldable
+    DeriveFunctor
+    DeriveGeneric
+    DeriveLift
+    DeriveTraversable
+    DerivingStrategies
+    DerivingVia
+    DoAndIfThenElse
+    EmptyCase
+    EmptyDataDecls
+    EmptyDataDeriving
+    ExistentialQuantification
+    ExplicitForAll
+    FlexibleContexts
+    FlexibleInstances
+    ForeignFunctionInterface
+    GADTSyntax
+    GeneralisedNewtypeDeriving
+    HexFloatLiterals
+    ImplicitPrelude
+    ImportQualifiedPost
+    InstanceSigs
+    KindSignatures
+    LambdaCase
+    MonomorphismRestriction
+    MultiParamTypeClasses
+    NamedFieldPuns
+    NamedWildCards
+    NumericUnderscores
+    OverloadedStrings
+    PartialTypeSignatures
+    PatternGuards
+    PolyKinds
+    PostfixOperators
+    RankNTypes
+    RelaxedPolyRec
+    ScopedTypeVariables
+    StandaloneDeriving
+    StandaloneKindSignatures
+    TupleSections
+    TypeApplications
+    TypeFamilies
+    TypeOperators
+    TypeSynonymInstances
+    ViewPatterns
+
+  default-language:   Haskell2010
+
+library script-deserialize
+  import:           common-lang
+  import:           common-imports
+  default-language: Haskell2010
+  build-depends:
+    , bytestring
+    , cardano-api
+    , filepath
+    , serialise
+    , template-haskell
+    , thrift-finance-offchain
+
+  exposed-modules:  Scripts.V1.Deserialize
+  other-modules:
+    ThriftFinance.Offchain.Error
+    ThriftFinance.Offchain.TFContract
+    ThriftFinance.Offchain.Utils
+
+  hs-source-dirs:   src
+
+library
+  import:          common-lang
+  import:          common-imports
+  exposed-modules:
+    Contract.Utils
+    ThriftFinance.Offchain.Check
+    ThriftFinance.Offchain.Contracts.Cancel
+    ThriftFinance.Offchain.Contracts.Initialise
+    ThriftFinance.Offchain.Contracts.Return
+    ThriftFinance.Offchain.Contracts.Submit
+    ThriftFinance.Offchain.Contracts.Trigger
+    ThriftFinance.Offchain.Contracts.TrivialProtocol
+    ThriftFinance.Offchain.Error
+    ThriftFinance.Offchain.TFContract
+    ThriftFinance.Offchain.Utils
+
+  build-depends:   plutip
+  hs-source-dirs:  src
+
+test-suite thrift-finance-offchain-test
+  import:         common-lang
+  import:         common-imports
+  type:           exitcode-stdio-1.0
+  build-depends:
+    , cardano-prelude          >=0.1.0.0
+    , containers               >=0.6.5.1
+    , plutip
+    , plutus-contract          >=0.1.0.0
+    , plutus-ledger            >=0.1.0.0
+    , plutus-pab               >=0.1.0.0
+    , script-deserialize
+    , tasty                    >=1.4
+    , text                     >=1.2.4.1
+    , thrift-finance-offchain
+
+  ghc-options:    -Wall -threaded -rtsopts
+  hs-source-dirs: test
+  main-is:        Spec.hs
+  other-modules:
+    Spec.Plutip
+    Spec.Plutip.Common
+    Spec.Tests.Cancel
+    Spec.Tests.Initialise
+    Spec.Tests.MVP
+    Spec.Tests.Return
+    Spec.Tests.Submit
+    Spec.Tests.Trigger
+    Spec.Tests.TrivialProtocol

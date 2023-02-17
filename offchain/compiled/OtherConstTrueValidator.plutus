@@ -1,0 +1,8 @@
+{
+    "cborHex": "4c4b0100002223249920b81e01",
+    "description": "Other Const True Validator (DoTracing)",
+    "params": [],
+    "rawHex": "4b0100002223249920b81e01",
+    "role": "ValidatorRole",
+    "version": "ScriptV1"
+}

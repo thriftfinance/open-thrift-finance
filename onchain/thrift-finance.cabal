@@ -1,0 +1,179 @@
+cabal-version:      3.0
+name:               thrift-finance
+version:            0.1
+synopsis:           TODO
+description:        TODO
+homepage:           https://github.com/mlabs-haskell/thrift-finance
+bug-reports:        https://github.com/mlabs-haskell/thrift-finance
+license:
+license-file:
+author:             MLabs
+maintainer:         TODO
+copyright:          TODO
+category:           TODO
+build-type:         Simple
+tested-with:        GHC ==9.2.1
+extra-source-files: README.md
+
+source-repository head
+  type:     git
+  location: https://github.com/mlabs-haskell/thrift-finance
+
+-- Common sections
+
+common common-lang
+  ghc-options:
+    -Wall -Wcompat -Wincomplete-uni-patterns -Wno-unused-do-bind
+    -Wno-partial-type-signatures -Wmissing-export-lists
+    -Wincomplete-record-updates -Wmissing-deriving-strategies
+    -Wno-name-shadowing -Wunused-foralls -fprint-explicit-foralls
+    -fprint-explicit-kinds -fwarn-missing-import-lists -Werror
+
+  mixins:
+    base hiding (Prelude),
+    pprelude (PPrelude as Prelude)
+
+  build-depends:
+    , base      >=4.14
+    , pprelude
+
+  default-extensions:
+    NoStarIsType
+    BangPatterns
+    BinaryLiterals
+    ConstrainedClassMethods
+    ConstraintKinds
+    DataKinds
+    DeriveAnyClass
+    DeriveDataTypeable
+    DeriveFoldable
+    DeriveFunctor
+    DeriveGeneric
+    DeriveLift
+    DeriveTraversable
+    DerivingStrategies
+    DerivingVia
+    DoAndIfThenElse
+    EmptyCase
+    EmptyDataDecls
+    EmptyDataDeriving
+    ExistentialQuantification
+    ExplicitForAll
+    FlexibleContexts
+    FlexibleInstances
+    ForeignFunctionInterface
+    GADTSyntax
+    GeneralisedNewtypeDeriving
+    HexFloatLiterals
+    ImplicitPrelude
+    ImportQualifiedPost
+    InstanceSigs
+    KindSignatures
+    LambdaCase
+    MonomorphismRestriction
+    MultiParamTypeClasses
+    NamedFieldPuns
+    NamedWildCards
+    NumericUnderscores
+    OverloadedStrings
+    PartialTypeSignatures
+    PatternGuards
+    PolyKinds
+    PostfixOperators
+    RankNTypes
+    RelaxedPolyRec
+    ScopedTypeVariables
+    StandaloneDeriving
+    StandaloneKindSignatures
+    TraditionalRecordSyntax
+    TupleSections
+    TypeApplications
+    TypeFamilies
+    TypeOperators
+    TypeSynonymInstances
+    ViewPatterns
+    OverloadedRecordDot
+    QualifiedDo
+
+  default-language:   Haskell2010
+
+common common-deps
+  build-depends:
+    , base
+    , bytestring
+    , generics-sop
+    , mtl
+    , plutarch
+    , plutarch-extra
+    , plutus-ledger-api
+    , plutus-tx
+    , ply-plutarch
+    , pprelude
+    , text
+    , thrift-finance-common
+
+library
+  import:          common-lang
+  import:          common-deps
+  exposed-modules:
+    ThriftFinance
+    ThriftFinance.Config
+    ThriftFinance.Plutarch.Api
+    ThriftFinance.Plutarch.AssocMap
+    ThriftFinance.Plutarch.Bool
+    ThriftFinance.Plutarch.List
+    ThriftFinance.Plutarch.Patterns
+    ThriftFinance.Plutarch.Scripts.V1
+    ThriftFinance.Plutarch.TermCont
+    ThriftFinance.Plutarch.Value
+    ThriftFinance.Script.Types
+    ThriftFinance.Script.Validator
+    ThriftFinance.Token.MintingPolicy
+    ThriftFinance.Token.Types
+    ThriftFinance.TrivialProtocol.RewardToken
+    ThriftFinance.TrivialProtocol.Token
+    ThriftFinance.TrivialProtocol.Types
+    ThriftFinance.Types
+    ThriftFinance.Utils
+
+  hs-source-dirs:  src
+
+library pprelude
+  default-language: Haskell2010
+  build-depends:
+    , base
+    , plutarch
+
+  exposed-modules:  PPrelude
+  hs-source-dirs:   src
+
+executable thrift-finance-exe
+  import:         common-lang
+  import:         common-deps
+  main-is:        Main.hs
+  build-depends:
+    , directory
+    , filepath
+    , thrift-finance
+    , thrift-finance-common
+
+  hs-source-dirs: app
+  ghc-options:    -threaded -rtsopts -with-rtsopts=-N
+
+test-suite thrift-finance-test
+  import:         common-lang
+  import:         common-deps
+  type:           exitcode-stdio-1.0
+  hs-source-dirs: test
+  main-is:        Spec.hs
+  other-modules:  Test.ThriftFinance
+  build-depends:
+    , hspec
+    , plutarch
+    , plutarch-test
+    , QuickCheck
+    , quickcheck-instances
+    , tasty
+    , tasty-quickcheck
+    , thrift-finance
+    , thrift-finance-common
