@@ -1,6 +1,7 @@
 tag: "docs-00-desing"
 date: 2022/07/07
 author: ["cstml", "Borja"]
+Product: ["Josiah Odosu", "Jaime Caso"]
 ---
 
 # Design Document
